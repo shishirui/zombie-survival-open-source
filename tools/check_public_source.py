@@ -32,7 +32,7 @@ def allowed(name):
     return (name in EXACT
             or (name.startswith(SOURCE_DIRS) and Path(name).suffix in ('.cs', '.mm'))
             or (name.startswith('docs/') and Path(name).suffix in ('.md', '.txt'))
-            or (name.startswith('docs/media/') and Path(name).suffix in ('.jpg', '.png'))
+            or (name.startswith('docs/media/') and Path(name).suffix in ('.jpg', '.png', '.gif'))
             or (name.startswith('tools/') and Path(name).suffix == '.py'))
 
 result = subprocess.run(['git', 'ls-files', '-z'], cwd=ROOT, check=True, capture_output=True)
@@ -58,7 +58,9 @@ for name in names:
     if SENSITIVE.search(text):
         issues.append(f'Potential sensitive data: {name} (value suppressed)')
     if name.endswith(('.md', '.txt')):
-        for link in re.findall(r'\]\(([^\s)]+)(?:\s+[^)]*)?\)', text):
+        links = re.findall(r'\]\(([^\s)]+)(?:\s+[^)]*)?\)', text)
+        links += re.findall(r'<img\b[^>]*\bsrc=[\"\']([^\"\']+)[\"\']', text)
+        for link in links:
             if ':' in link or link.startswith('#'):
                 continue
             if not (f.parent / link.split('#')[0]).exists():

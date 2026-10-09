@@ -7,7 +7,7 @@
 一款为手机横屏操作设计的 3D 俯视角僵尸生存射击游戏。
 自动瞄准与射击，让注意力留给走位、武器选择和突围时机。
 
-[English](README.en.md) · [观看介绍视频](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4) · [开发指南](docs/DEVELOPMENT.md) · [素材与许可](THIRD_PARTY.md)
+[English](README.en.md) · [下载介绍视频](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4) · [开发指南](docs/DEVELOPMENT.md) · [素材与许可](THIRD_PARTY.md)
 
 ![游戏实景](docs/media/hero.jpg)
 
@@ -37,17 +37,28 @@
 
 枪械范围按当前关卡限制；新增武器仍需要在局内获取。通关后解锁下一关，关卡记录保存在本地。
 
-| 商业街 · 持续火力 | 隔离营地 · 近身突围 |
-| :---: | :---: |
-| ![商业街战斗](docs/media/street.jpg) | ![隔离营地战斗](docs/media/camp.jpg) |
-| **货运站 · 范围爆破** | **Boss · 酸液封锁** |
-| ![榴弹发射器战斗](docs/media/freight.jpg) | ![酸液 Boss](docs/media/boss.jpg) |
+<table width="100%">
+  <tr><th width="50%" align="center">商业街 · 持续火力</th><th width="50%" align="center">隔离营地 · 近身突围</th></tr>
+  <tr>
+    <td width="50%" align="center"><img src="docs/media/street.jpg" alt="商业街 · 持续火力" width="800"></td>
+    <td width="50%" align="center"><img src="docs/media/camp.jpg" alt="隔离营地 · 近身突围" width="800"></td>
+  </tr>
+  <tr><th width="50%" align="center">货运站 · 范围爆破</th><th width="50%" align="center">Boss · 酸液封锁</th></tr>
+  <tr>
+    <td width="50%" align="center"><img src="docs/media/freight.jpg" alt="货运站 · 范围爆破" width="800"></td>
+    <td width="50%" align="center"><img src="docs/media/boss.jpg" alt="Boss · 酸液封锁" width="800"></td>
+  </tr>
+</table>
 
 ![主动选择强化](docs/media/growth.jpg)
 
 ## 介绍视频
 
-[![播放 51 秒游戏介绍](docs/media/trailer-poster.jpg)](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4)
+![战斗实录动图](docs/media/combat-preview.gif)
+
+**5 秒战斗预览 · 下方可下载 51 秒完整介绍视频。**
+
+[![下载 51 秒游戏介绍](docs/media/trailer-poster.jpg)](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4)
 
 视频和截图取自本项目的桌面演示构建，使用与手机版共用的玩法与美术。拍摄使用了脚本控制、预设武器/Boss 和角色保护，以便展示机制；不是手机实测帧率或自然通关录像。视频包含实际游戏音效；媒体中的第三方素材不随代码改授 MIT。
 

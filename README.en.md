@@ -4,7 +4,7 @@
 
 A mobile-first, landscape, 3D top-down zombie survival shooter built with Unity and URP. Automatic targeting and firing leave room for movement, weapon choice, grenades and well-timed dodges.
 
-[中文](README.md) · [Watch the trailer](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4) · [Development guide](docs/DEVELOPMENT.md) · [Asset licenses](THIRD_PARTY.md)
+[中文](README.md) · [Download the trailer](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4) · [Development guide](docs/DEVELOPMENT.md) · [Asset licenses](THIRD_PARTY.md)
 
 ![Dead District gameplay](docs/media/hero.jpg)
 
@@ -28,12 +28,20 @@ New weapons must still be collected. Each chapter has eight waves. Clear the ent
 - **World feedback:** destructible props, doors, pickups, cover fading, corpses, environmental ambience and layered effects.
 - **Comfort settings:** music/SFX levels, camera shake, reduced flashes, joystick mode and button size.
 
-| Street combat | Camp combat |
-| --- | --- |
-| ![Street](docs/media/street.jpg) | ![Camp](docs/media/camp.jpg) |
-| ![Launcher](docs/media/freight.jpg) | ![Acid boss](docs/media/boss.jpg) |
+<table width="100%">
+  <tr><th width="50%" align="center">Street combat</th><th width="50%" align="center">Camp combat</th></tr>
+  <tr>
+    <td width="50%" align="center"><img src="docs/media/street.jpg" alt="Street combat" width="800"></td>
+    <td width="50%" align="center"><img src="docs/media/camp.jpg" alt="Camp combat" width="800"></td>
+  </tr>
+  <tr><th width="50%" align="center">Launcher combat</th><th width="50%" align="center">Acid boss</th></tr>
+  <tr>
+    <td width="50%" align="center"><img src="docs/media/freight.jpg" alt="Launcher combat" width="800"></td>
+    <td width="50%" align="center"><img src="docs/media/boss.jpg" alt="Acid boss" width="800"></td>
+  </tr>
+</table>
 
-[![Watch the trailer](docs/media/trailer-poster.jpg)](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4)
+[![Download the trailer](docs/media/trailer-poster.jpg)](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4)
 
 Media was captured in a desktop presentation build using shared game systems and art. Capture uses scripted inputs, staged weapons/bosses and player protection. It is not an unassisted playthrough or an iPhone performance benchmark. Third-party assets shown in media are not licensed under MIT.
 
