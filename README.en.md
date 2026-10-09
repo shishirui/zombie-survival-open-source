@@ -4,7 +4,7 @@
 
 A mobile-first, landscape, 3D top-down zombie survival shooter built with Unity and URP. Automatic targeting and firing leave room for movement, weapon choice, grenades and well-timed dodges.
 
-[中文](README.md) · [Download the trailer](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4) · [Development guide](docs/DEVELOPMENT.md) · [Asset licenses](THIRD_PARTY.md)
+[中文](README.md) · [Watch the trailer](#gameplay-trailer) · [Development guide](docs/DEVELOPMENT.md) · [Asset licenses](THIRD_PARTY.md)
 
 ![Dead District gameplay](docs/media/hero.jpg)
 
@@ -41,7 +41,9 @@ New weapons must still be collected. Each chapter has eight waves. Clear the ent
   </tr>
 </table>
 
-[![Download the trailer](docs/media/trailer-poster.jpg)](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4)
+https://github.com/user-attachments/assets/5082a802-0356-491c-a7bd-8d2b83b232f2
+
+[Download the full-resolution MP4](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4)
 
 Media was captured in a desktop presentation build using shared game systems and art. Capture uses scripted inputs, staged weapons/bosses and player protection. It is not an unassisted playthrough or an iPhone performance benchmark. Third-party assets shown in media are not licensed under MIT.
 

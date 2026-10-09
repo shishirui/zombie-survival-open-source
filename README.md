@@ -7,7 +7,7 @@
 一款为手机横屏操作设计的 3D 俯视角僵尸生存射击游戏。
 自动瞄准与射击，让注意力留给走位、武器选择和突围时机。
 
-[English](README.en.md) · [下载介绍视频](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4) · [开发指南](docs/DEVELOPMENT.md) · [素材与许可](THIRD_PARTY.md)
+[English](README.en.md) · [观看介绍视频](#介绍视频) · [开发指南](docs/DEVELOPMENT.md) · [素材与许可](THIRD_PARTY.md)
 
 ![游戏实景](docs/media/hero.jpg)
 
@@ -56,9 +56,11 @@
 
 ![战斗实录动图](docs/media/combat-preview.gif)
 
-**5 秒战斗预览 · 下方可下载 51 秒完整介绍视频。**
+**5 秒战斗预览 · 点击下方播放器观看 51 秒完整介绍。**
 
-[![下载 51 秒游戏介绍](docs/media/trailer-poster.jpg)](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4)
+https://github.com/user-attachments/assets/5082a802-0356-491c-a7bd-8d2b83b232f2
+
+[下载高清 MP4](https://github.com/shishirui/zombie-survival-open-source/releases/download/v0.13.0-source/dead-district-trailer.mp4)
 
 视频和截图取自本项目的桌面演示构建，使用与手机版共用的玩法与美术。拍摄使用了脚本控制、预设武器/Boss 和角色保护，以便展示机制；不是手机实测帧率或自然通关录像。视频包含实际游戏音效；媒体中的第三方素材不随代码改授 MIT。
 
