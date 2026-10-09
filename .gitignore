@@ -1,0 +1,30 @@
+# Public source allowlist is checked by tools/check_public_source.py.
+Library/
+Temp/
+Obj/
+Logs/
+UserSettings/
+Build/
+Builds/
+.vs/
+.idea/
+.DS_Store
+__pycache__/
+*.csproj
+*.sln
+*.user
+*.p12
+*.pfx
+*.p8
+*.mobileprovision
+*.provisionprofile
+*.ipa
+*.apk
+*.unitypackage
+.env
+.env.*
+Assets/TopDownEngine/
+Assets/PolygonApocalypse/
+Assets/Epic Toon FX/
+Distribution/local/
+Distribution/output/

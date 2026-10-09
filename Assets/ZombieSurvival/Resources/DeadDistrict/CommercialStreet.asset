@@ -1,0 +1,202 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 260990f9c4a6f4b46a5d934127f446a4, type: 3}
+  m_Name: CommercialStreet
+  m_EditorClassIdentifier: DeadDistrict.Runtime::DeadDistrict.ChapterDefinition
+  id: commercial-street
+  title: "\u5E9F\u5F03\u5546\u4E1A\u8857"
+  sceneName: DeadDistrict
+  eliteHealth: 4800
+  eliteDamage: 34
+  eliteWindup: 0.7
+  eliteRadius: 3.2
+  eliteRange: 10
+  eliteRecovery: 1.6
+  eliteCooldown: 3
+  waves:
+  - title: "\u8857\u5934\u5F02\u52A8"
+    warning: "\u666E\u901A\u611F\u67D3\u8005\u9760\u8FD1"
+    health: 0.9
+    damage: 1
+    spawnInterval: 0.3
+    burstPause: 1.5
+    burstSize: 8
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 24
+      elite: 0
+      direction: 0
+      delay: 0
+  - title: "\u5C38\u7FA4\u96C6\u7ED3"
+    warning: "\u5BC6\u96C6\u5C38\u7FA4\u6B63\u5728\u903C\u8FD1"
+    health: 1
+    damage: 1
+    spawnInterval: 0.22
+    burstPause: 1.5
+    burstSize: 8
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 38
+      elite: 0
+      direction: 0
+      delay: 0
+  - title: "\u72AC\u7FA4\u7A81\u88AD"
+    warning: "\u611F\u67D3\u72AC\u6DF7\u5165\u5C38\u7FA4"
+    health: 1.05
+    damage: 1.03
+    spawnInterval: 0.3
+    burstPause: 1.5
+    burstSize: 8
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 14
+      elite: 0
+      direction: -20
+      delay: 0
+    - kind: 1
+      count: 6
+      elite: 0
+      direction: 25
+      delay: 2
+    - kind: 0
+      count: 14
+      elite: 0
+      direction: 0
+      delay: 1
+  - title: "\u4E24\u7FFC\u6765\u88AD"
+    warning: "\u7559\u610F\u4E24\u4FA7\uFF0C\u4FDD\u6301\u79FB\u52A8"
+    health: 1.12
+    damage: 1.08
+    spawnInterval: 0.3
+    burstPause: 1.5
+    burstSize: 12
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 21
+      elite: 0
+      direction: -65
+      delay: 0
+    - kind: 1
+      count: 4
+      elite: 0
+      direction: 55
+      delay: 1
+    - kind: 0
+      count: 21
+      elite: 0
+      direction: 65
+      delay: 1
+  - title: "\u91CD\u88C5\u5165\u573A"
+    warning: "\u80D6\u50F5\u5C38\u9760\u8FD1\uFF0C\u7559\u597D\u624B\u96F7"
+    health: 1.2
+    damage: 1.12
+    spawnInterval: 0.3
+    burstPause: 1.5
+    burstSize: 8
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 15
+      elite: 0
+      direction: -20
+      delay: 0
+    - kind: 2
+      count: 2
+      elite: 0
+      direction: 0
+      delay: 2
+    - kind: 1
+      count: 4
+      elite: 0
+      direction: 35
+      delay: 1
+    - kind: 0
+      count: 15
+      elite: 0
+      direction: 20
+      delay: 0
+  - title: "\u77ED\u6682\u5598\u606F"
+    warning: "\u9644\u8FD1\u8865\u7ED9\u5DF2\u6295\u653E"
+    health: 1.18
+    damage: 1.1
+    spawnInterval: 0.3
+    burstPause: 1.5
+    burstSize: 8
+    supplies: 1
+    groups:
+    - kind: 0
+      count: 22
+      elite: 0
+      direction: 0
+      delay: 0
+    - kind: 1
+      count: 2
+      elite: 0
+      direction: 20
+      delay: 2
+  - title: "\u8857\u533A\u6CA6\u9677"
+    warning: "\u6DF7\u5408\u5C38\u6F6E\uFF0C\u51C6\u5907\u7A81\u56F4"
+    health: 1.3
+    damage: 1.22
+    spawnInterval: 0.22
+    burstPause: 1
+    burstSize: 8
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 26
+      elite: 0
+      direction: -50
+      delay: 0
+    - kind: 1
+      count: 8
+      elite: 0
+      direction: 50
+      delay: 1
+    - kind: 2
+      count: 3
+      elite: 0
+      direction: 0
+      delay: 1
+    - kind: 0
+      count: 26
+      elite: 0
+      direction: 40
+      delay: 0
+  - title: "\u8857\u533A\u66B4\u541B"
+    warning: "\u6700\u7EC8\u7CBE\u82F1\u51FA\u73B0\uFF0C\u907F\u5F00\u7EA2\u5708"
+    health: 1.35
+    damage: 1.3
+    spawnInterval: 0.3
+    burstPause: 1.5
+    burstSize: 8
+    supplies: 0
+    groups:
+    - kind: 2
+      count: 1
+      elite: 1
+      direction: 0
+      delay: 0
+    - kind: 0
+      count: 16
+      elite: 0
+      direction: -35
+      delay: 4
+    - kind: 1
+      count: 4
+      elite: 0
+      direction: 40
+      delay: 2

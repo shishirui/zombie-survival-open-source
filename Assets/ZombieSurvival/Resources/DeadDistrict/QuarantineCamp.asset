@@ -1,0 +1,262 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 260990f9c4a6f4b46a5d934127f446a4, type: 3}
+  m_Name: QuarantineCamp
+  m_EditorClassIdentifier: DeadDistrict.Runtime::DeadDistrict.ChapterDefinition
+  id: quarantine-camp
+  title: "\u5E9F\u5F03\u9694\u79BB\u8425\u5730"
+  sceneName: QuarantineCamp
+  eliteHealth: 5400
+  eliteDamage: 36
+  eliteWindup: 0.7
+  eliteRadius: 3.2
+  eliteRange: 11
+  eliteRecovery: 1.1
+  eliteCooldown: 1.25
+  number: 2
+  maxAlive: 270
+  spawnLanes: 3
+  spawnSpread: 100
+  arenaHalfSize: 48
+  chargeElite: 1
+  acidElite: 0
+  streetRooms: 0
+  description:
+  victoryTitle:
+  acidRadius: 2
+  acidLifetime: 3
+  acidTickDamage: 7
+  acidTickInterval: 0.7
+  acidFlightTime: 0.65
+  eliteName: "\u8425\u5730\u51B2\u649E\u8005"
+  chargeSpeed: 12
+  chargeDistance: 13
+  chargeWidth: 1.4
+  worldCrates:
+  - {x: -8, y: 0, z: 9}
+  - {x: 9, y: 0, z: -10}
+  - {x: -28, y: 0, z: 10}
+  - {x: 28, y: 0, z: -17}
+  - {x: -9, y: 0, z: 29}
+  - {x: 10, y: 0, z: -32}
+  worldExplosives:
+  - {x: -8, y: 0, z: 17}
+  - {x: 9, y: 0, z: -18}
+  - {x: -27, y: 0, z: -6}
+  - {x: 28, y: 0, z: 5}
+  weaponSites:
+  - {x: 4, y: 0, z: 1}
+  - {x: 12, y: 0, z: 6}
+  - {x: -12, y: 0, z: -6}
+  supplyRoutes:
+  - {x: 8, y: 0, z: 5}
+  - {x: -8, y: 0, z: -6}
+  - {x: 27, y: 0, z: -10}
+  - {x: -27, y: 0, z: 11}
+  waves:
+  - title:
+    warning: "\u611F\u67D3\u8005\u8FDB\u5165\u8425\u5730"
+    health: 1.142
+    damage: 1.215
+    spawnInterval: 0.034
+    burstPause: 0.2
+    burstSize: 48
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 192
+      elite: 0
+      direction: 0
+      delay: 0
+  - title:
+    warning: "\u7559\u610F\u6DF7\u5165\u5C38\u7FA4\u7684\u611F\u67D3\u72AC"
+    health: 1.21
+    damage: 1.251
+    spawnInterval: 0.034
+    burstPause: 0.2
+    burstSize: 48
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 130
+      elite: 0
+      direction: -20
+      delay: 0
+    - kind: 1
+      count: 4
+      elite: 0
+      direction: 35
+      delay: 2
+    - kind: 0
+      count: 129
+      elite: 0
+      direction: 0
+      delay: 0
+  - title:
+    warning: "\u4E24\u4FA7\u5165\u53E3\u51FA\u73B0\u5C38\u7FA4"
+    health: 1.277
+    damage: 1.298
+    spawnInterval: 0.034
+    burstPause: 0.2
+    burstSize: 48
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 115
+      elite: 0
+      direction: -60
+      delay: 0
+    - kind: 1
+      count: 8
+      elite: 0
+      direction: 50
+      delay: 2
+    - kind: 0
+      count: 115
+      elite: 0
+      direction: 60
+      delay: 0
+  - title:
+    warning: "\u91CD\u88C5\u611F\u67D3\u8005\u9760\u8FD1"
+    health: 1.344
+    damage: 1.345
+    spawnInterval: 0.034
+    burstPause: 0.2
+    burstSize: 48
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 150
+      elite: 0
+      direction: -45
+      delay: 0
+    - kind: 2
+      count: 2
+      elite: 0
+      direction: 15
+      delay: 2
+    - kind: 1
+      count: 6
+      elite: 0
+      direction: 45
+      delay: 1
+    - kind: 0
+      count: 149
+      elite: 0
+      direction: 55
+      delay: 0
+  - title:
+    warning: "\u5229\u7528\u63A9\u4F53\uFF0C\u907F\u514D\u88AB\u5305\u56F4"
+    health: 1.434
+    damage: 1.392
+    spawnInterval: 0.034
+    burstPause: 0.2
+    burstSize: 48
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 125
+      elite: 0
+      direction: 30
+      delay: 0
+    - kind: 1
+      count: 7
+      elite: 0
+      direction: -45
+      delay: 2
+    - kind: 2
+      count: 3
+      elite: 0
+      direction: 0
+      delay: 1
+    - kind: 0
+      count: 124
+      elite: 0
+      direction: -50
+      delay: 0
+  - title:
+    warning: "\u9644\u8FD1\u8865\u7ED9\u5DF2\u6295\u653E"
+    health: 1.344
+    damage: 1.322
+    spawnInterval: 0.034
+    burstPause: 0.2
+    burstSize: 48
+    supplies: 1
+    groups:
+    - kind: 0
+      count: 181
+      elite: 0
+      direction: 0
+      delay: 0
+    - kind: 1
+      count: 2
+      elite: 0
+      direction: 35
+      delay: 2
+  - title:
+    warning: "\u6DF7\u5408\u5C38\u6F6E\u6B63\u5728\u96C6\u7ED3"
+    health: 1.568
+    damage: 1.499
+    spawnInterval: 0.034
+    burstPause: 0.2
+    burstSize: 48
+    supplies: 0
+    groups:
+    - kind: 0
+      count: 209
+      elite: 0
+      direction: -50
+      delay: 0
+    - kind: 1
+      count: 10
+      elite: 0
+      direction: 45
+      delay: 1
+    - kind: 2
+      count: 4
+      elite: 0
+      direction: 0
+      delay: 2
+    - kind: 0
+      count: 209
+      elite: 0
+      direction: 50
+      delay: 0
+  - title:
+    warning: "\u7CBE\u82F1\u6765\u88AD\uFF0C\u5411\u4E24\u4FA7\u8EB2\u907F\u51B2\u649E"
+    health: 1.613
+    damage: 1.569
+    spawnInterval: 0.034
+    burstPause: 0.2
+    burstSize: 48
+    supplies: 0
+    groups:
+    - kind: 2
+      count: 1
+      elite: 1
+      direction: 0
+      delay: 0
+    - kind: 0
+      count: 159
+      elite: 0
+      direction: -40
+      delay: 4
+    - kind: 1
+      count: 4
+      elite: 0
+      direction: 45
+      delay: 2
+    - kind: 2
+      count: 2
+      elite: 0
+      direction: 20
+      delay: 3

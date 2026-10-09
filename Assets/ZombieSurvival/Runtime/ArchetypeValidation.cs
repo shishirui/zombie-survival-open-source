@@ -1,0 +1,35 @@
+using System;
+using System.Collections;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UI;
+namespace DeadDistrict {
+ public sealed partial class SurvivalGame {internal void StageWaveAnnouncementValidation(){if(!CombatValidation)throw new InvalidOperationException("Validation only");NextHorde=Elapsed+4;}}
+ public sealed class ArchetypeValidation:MonoBehaviour {
+  string output;SurvivalGame g;MobilePreferences.Data prefs;
+  [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]static void Boot(){var args=RuntimeLaunch.Arguments();if(Array.IndexOf(args,"-archetype-smoke")<0)return;var v=new GameObject("Opt-in enemy archetype validation").AddComponent<ArchetypeValidation>();int n=Array.IndexOf(args,"-validation-output");v.output=n>=0?args[n+1]:Application.persistentDataPath;Directory.CreateDirectory(v.output);if(SurvivalGame.Instance)SurvivalGame.Instance.CombatValidation=true;v.StartCoroutine(v.Run());}
+  void Check(bool b,string why){if(!b)throw new Exception(why);}
+  IEnumerator Photo(string name){yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Application.isMobilePlatform?name:Path.Combine(output,name));yield return new WaitForSecondsRealtime(.25f);}
+  IEnumerator Run(){var routine=Core();while(true){bool more=false;object item=null;string error=null;try{more=routine.MoveNext();if(more)item=routine.Current;}catch(Exception e){error=e.ToString();}if(error!=null){MobilePreferences.Set(prefs);MobilePreferences.Flush();Time.timeScale=1;File.WriteAllText(Path.Combine(output,"archetype-failure.txt"),error);Debug.LogError("ARCHETYPE_FAIL "+error);Application.Quit(1);yield break;}if(!more)yield break;yield return item;}}
+  Vector3 Floor(Vector3 p){Check(NavMesh.SamplePosition(p,out var nav,2,NavMesh.AllAreas),"Fixture floor");return nav.position;}
+  IEnumerator Core(){yield return null;yield return null;g=SurvivalGame.Instance;g.CombatValidation=true;g.config.aimRange=0;prefs=MobilePreferences.Current;var baseline=prefs;baseline.reducedFlash=false;MobilePreferences.Set(baseline);g.Supplies.Clear();g.WeaponCrates.Clear();foreach(var z in g.Enemies)z.Retire();g.Growth.Enabled=true;
+   var f=Camera.main.transform.forward;f.y=0;f.Normalize();var right=Camera.main.transform.right;right.y=0;right.Normalize();
+   for(int i=0;i<3;i++){var z=g.Enemies[i];z.Spawn(Floor(g.PlayerPosition+f*3.8f+right*(i-1)*2.5f),0,(EnemyKind)i);z.Model.rotation=Quaternion.LookRotation(-f);}
+   yield return new WaitForSeconds(.15f);var dog=g.Enemies[1];var brute=g.Enemies[2];Check(dog.Actor.Quadruped&&!g.Enemies[0].Actor.Quadruped,"Wrong active model");Check(brute.Model.GetComponentsInChildren<SkinnedMeshRenderer>().Any(r=>r.sharedMesh.name.StartsWith("Body-")),"Brute not broad");
+   var renderer=dog.Model.GetComponentInChildren<SkinnedMeshRenderer>();var baked=new Mesh();renderer.BakeMesh(baked,true);var vertices=baked.vertices;var bounds=new Bounds(renderer.transform.TransformPoint(vertices[0]),Vector3.zero);foreach(var v in vertices)bounds.Encapsulate(renderer.transform.TransformPoint(v));Destroy(baked);Check(bounds.size.y>.7f&&bounds.size.y<1.8f&&bounds.size.z<3&&bounds.size.x<3,"Dog visual scale "+bounds);Check(dog.GetComponent<CapsuleCollider>().bounds.Contains(dog.AimPoint),"Aim outside dog collider");yield return Photo("enemy-archetypes.png");
+   var bones=renderer.bones;var before=bones.Select(b=>b.localRotation).ToArray();dog.Agent.speed=4.3f;dog.Actor.MoveInfected(4.3f,1);yield return new WaitForSeconds(.15f);Check(bones.Where((b,i)=>Quaternion.Angle(b.localRotation,before[i])>2).Any(),"Dog legs not animated");dog.Actor.Attack();yield return new WaitForSeconds(.1f);yield return Photo("hound-running.png");
+   foreach(var z in g.Enemies.Take(3))z.Retire();
+   for(int weapon=0;weapon<2;weapon++){dog.Spawn(Floor(g.PlayerPosition+f*4),0,EnemyKind.Runner);if(weapon==1)g.CollectShotgun();g.config.aimRange=10;int shots=g.ShotsFired;float end=Time.time+4;while(dog.Alive&&Time.time<end)yield return null;Check(!dog.Alive&&g.ShotsFired>shots,"Weapon cannot hit low dog "+weapon);g.config.aimRange=0;yield return new WaitForSeconds(.5f);var corpse=g.Corpses.GetComponentsInChildren<HoundCorpse>().Last();yield return Photo("hound-death-"+weapon+".png");Check(corpse.GetComponent<Renderer>().bounds.size.y<1.0f&&Mathf.Abs(corpse.GetComponent<Renderer>().bounds.min.y-dog.transform.position.y)<.05f,"Dog corpse floats "+corpse.GetComponent<Renderer>().bounds);var position=corpse.transform.position;var rotation=corpse.transform.rotation;yield return new WaitForSeconds(.25f);Check(Vector3.Distance(position,corpse.transform.position)<.001f&&Quaternion.Angle(rotation,corpse.transform.rotation)<.1f,"Dog corpse keeps moving");}
+   yield return Photo("hound-corpses.png");
+   for(int i=0;i<3;i++){dog.Retire();dog.Spawn(Floor(g.PlayerPosition+f*4),0,(EnemyKind)i);Check(dog.Actor.Quadruped==(i==1),"Pooled archetype leaked");Check(dog.Model.gameObject.activeSelf,"Active model hidden");if(i==0)Check(dog.Model.localScale==Vector3.one&&dog.GetComponent<CapsuleCollider>().height>1.5f,"Human dimensions not restored");dog.Health.Kill();}
+   yield return new WaitForSeconds(5.7f);Check(g.Corpses.ActiveCount==0,"Corpse pool did not expire");
+   while(g.Growth.Points<2)g.Growth.Award(EnemyKind.Normal);g.hud.RefreshGrowth();yield return null;var edge=GameObject.Find("Growth point ring").GetComponent<ActionGlyph>();float low=1,high=0;float deadline=Time.unscaledTime+2.1f;while(Time.unscaledTime<deadline){low=Mathf.Min(low,edge.color.a);high=Mathf.Max(high,edge.color.a);yield return null;}Check(high-low>.6f&&!edge.raycastTarget,"Border pulse absent/blocks touches");
+   var p=prefs;p.reducedFlash=true;MobilePreferences.Set(p);yield return null;low=1;high=0;deadline=Time.unscaledTime+2.1f;while(Time.unscaledTime<deadline){low=Mathf.Min(low,edge.color.a);high=Mathf.Max(high,edge.color.a);yield return null;}Check(high-low<.17f,"Reduced flash border too strong");MobilePreferences.Set(prefs);MobilePreferences.Flush();
+   g.StageWaveAnnouncementValidation();g.hud.Refresh();yield return new WaitForSeconds(.2f);var waveObject=GameObject.Find("Wave subtitle");Check(waveObject!=null,"Wave banner not visible after HUD refresh");var subtitle=waveObject.GetComponent<Text>();Check(!subtitle.text.Contains("强化")&&subtitle.text.Contains("秒后开始"),"Redundant wave growth hint");yield return Photo("growth-border-wave.png");
+   g.Growth.TryOpen();yield return new WaitForSecondsRealtime(.35f);Check(GameObject.Find("Defer growth").GetComponentInChildren<Text>().text=="返回战斗","Defer label");yield return Photo("growth-return-button.png");
+   File.WriteAllText(Path.Combine(output,"archetype-pass.json"),"{\"passed\":true,\"dogModelAndFourLegAnimation\":true,\"rifleAndShotgunHitLowDog\":true,\"dogCorpseStableAndExpires\":true,\"broadBrute\":true,\"pooledArchetypesReset\":true,\"borderPulse\":true,\"reducedFlashRespected\":true,\"noWaveGrowthHint\":true,\"returnButtonLabel\":true}");Debug.Log("ARCHETYPE_PASS");Application.Quit(0);
+  }
+ }
+}

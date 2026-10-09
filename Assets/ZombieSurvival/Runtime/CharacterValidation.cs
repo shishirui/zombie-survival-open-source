@@ -1,0 +1,48 @@
+using System;
+using System.Collections;
+using System.IO;
+using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UI;
+namespace DeadDistrict {
+ public sealed class CharacterValidation : MonoBehaviour {
+  static bool started;string output;bool capture;
+  [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+  static void Boot(){var args=RuntimeLaunch.Arguments();bool capture=Array.IndexOf(args,"-character-capture")>=0;if(started||(!capture&&Array.IndexOf(args,"-character-smoke")<0))return;started=true;var v=new GameObject("Opt-in character validation").AddComponent<CharacterValidation>();DontDestroyOnLoad(v.gameObject);v.capture=capture;int n=Array.IndexOf(args,"-validation-output");v.output=n>=0?args[n+1]:Application.persistentDataPath;Directory.CreateDirectory(v.output);if(SurvivalGame.Instance)SurvivalGame.Instance.CombatValidation=true;v.StartCoroutine(v.Run());}
+  void Require(bool result,string reason){if(!result)throw new Exception(reason);}
+  IEnumerator Run(){var routine=Core();while(true){object current=null;bool moved=false;string failure=null;try{moved=routine.MoveNext();if(moved)current=routine.Current;}catch(Exception e){failure=e.ToString();}if(failure!=null){Time.timeScale=1;File.WriteAllText(Path.Combine(output,"character-failure.txt"),failure);Debug.LogError("CHARACTER_VALIDATION_FAIL "+failure);Application.Quit(1);yield break;}if(!moved)yield break;yield return current;}}
+  IEnumerator Photo(string name){if(!capture)yield break;Time.timeScale=0;yield return new WaitForSecondsRealtime(.12f);yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,name));yield return new WaitForSecondsRealtime(.25f);Time.timeScale=1;}
+  Vector3 Floor(Vector3 desired){Require(NavMesh.SamplePosition(desired,out var nav,.8f,NavMesh.AllAreas),"Missing fixture floor "+desired);return nav.position;}
+  IEnumerator Core(){
+   yield return null;yield return null;var g=SurvivalGame.Instance;g.CombatValidation=true;g.AutoTest=false;g.Supplies.Clear();g.WeaponCrates.Clear();g.config.aimRange=0;
+   Require(g.config.shotgunMagazineSize==60&&Mathf.Approximately(g.config.shotgunRoundsPerSecond,3.2f),"Shotgun balance");
+   Require(g.CanRoll&&g.Corpses.ActiveCount==0,"Initial dodge/corpse state");
+   var hp=g.PlayerHealth;hp.SetHealth(50);hp.GrantArmor();var start=g.PlayerPosition;SurvivalInput.Move=Vector2.right;GameObject.Find("Dodge").GetComponent<Button>().onClick.Invoke();
+   Require(g.Rolling&&g.Rolls==1&&hp.DodgeInvulnerable&&Physics.GetIgnoreLayerCollision(26,24),"Dodge button did not start");hp.Damage(20,g.gameObject,0,0,Vector3.forward);Require(hp.CurrentHealth==50&&hp.Armor==25,"Dodge damage consumed health or armor");
+   yield return new WaitForSeconds(.13f);yield return Photo("player-roll.png");g.TogglePause();var pausedPos=g.PlayerPosition;float remaining=g.RollCooldownRemaining;yield return new WaitForSecondsRealtime(.25f);Require(g.Rolling&&Vector3.Distance(g.PlayerPosition,pausedPos)<.01f&&Mathf.Abs(remaining-g.RollCooldownRemaining)<.03f&&!g.TryRoll(),"Pause advanced dodge");g.TogglePause();yield return new WaitForSeconds(.45f);
+   float rollDistance=Vector3.Distance(start,g.PlayerPosition);Require(!g.Rolling&&!hp.DodgeInvulnerable&&rollDistance>4&&rollDistance<4.4f&&!Physics.GetIgnoreLayerCollision(26,24)&&!g.TryRoll(),"Dodge distance/end/cooldown "+rollDistance);
+   hp.Damage(8,g.gameObject,0,0,Vector3.forward);Require(hp.Armor==17&&hp.CurrentHealth==50,"Dodge immunity persisted");
+   yield return new WaitForSeconds(3);var forward=Camera.main.transform.forward;forward.y=0;forward.Normalize();var right=Camera.main.transform.right;right.y=0;right.Normalize();
+   start=g.PlayerPosition;var wall=GameObject.CreatePrimitive(PrimitiveType.Cube);wall.layer=8;wall.transform.SetPositionAndRotation(start+forward*1.2f+Vector3.up,Quaternion.LookRotation(forward));wall.transform.localScale=new Vector3(3,3,.25f);SurvivalInput.Move=Vector2.up;Require(g.TryRoll(),"Second roll");yield return new WaitForSeconds(.5f);float wallDistance=Vector3.Distance(start,g.PlayerPosition);Require(wallDistance<.9f&&!g.Rolling,"Dodge passed wall "+wallDistance);Destroy(wall);yield return null;SurvivalInput.Move=Vector2.zero;
+   yield return new WaitForSeconds(3);Require(g.BeginGrenadeAim()&&!g.TryRoll(),"Grenade aim allowed dodge");g.EndGrenadeAim(false);
+   Vector3 center=g.PlayerPosition+forward*5;
+   for(int i=0;i<3;i++){var z=g.Enemies[i];z.Spawn(Floor(center+right*(i-1)*2.2f),g.config.enemySpeed,(EnemyKind)i);float expected=i==0?130:i==1?78:390;Require(z.Health.MaximumHealth==expected&&z.Health.CurrentHealth==expected,"Variant health "+i);Require(Mathf.Abs(z.Agent.speed-(i==0?2.8f:i==1?4.3f:1.9f))<.01f,"Variant speed "+i);z.Agent.speed=0;}
+   yield return new WaitForSeconds(.15f);Require(g.EnemyBars.VisibleFor(0)&&g.EnemyBars.VisibleFor(1)&&g.EnemyBars.VisibleFor(2),"Variant bars invisible");yield return Photo("infected-variants.png");
+   int kills=g.Kills;var brute=g.Enemies[2];Vector3 bruteBefore=brute.transform.position;Require(g.BeginGrenadeAim(),"Grenade blast fixture");g.SetGrenadeAim(Vector2.up*(.16f+.84f*.3f));g.EndGrenadeAim(true);float deadline=Time.time+2;while(g.GrenadeInFlight&&Time.time<deadline)yield return null;
+   Require(g.Kills==kills+2&&!g.Enemies[0].Alive&&!g.Enemies[1].Alive&&brute.Alive&&brute.Health.CurrentHealth==260&&brute.KnockedBack,"Actual blast types/damage/knockback");
+   Require(g.Corpses.Played==2&&g.Corpses.ActiveCount==2&&g.Corpses.SimulatedCount==2&&g.Corpses.LastImpulse.y>2,"Explosion death physics");var hipsBefore=g.Corpses.LastHipsPosition;yield return new WaitForSeconds(.2f);yield return Photo("explosion-ragdolls.png");
+   g.TogglePause();var hipsPaused=g.Corpses.LastHipsPosition;yield return new WaitForSecondsRealtime(.2f);Require(Vector3.Distance(hipsPaused,g.Corpses.LastHipsPosition)<.03f&&g.Corpses.ActiveCount==2,"Pause advanced corpses");g.TogglePause();yield return new WaitForSeconds(.4f);
+   float knockDistance=Vector3.Distance(bruteBefore,brute.transform.position),corpseDistance=Vector3.Distance(hipsBefore,g.Corpses.LastHipsPosition);
+   Require(knockDistance>.25f&&knockDistance<1&&brute.Agent.isOnNavMesh&&!brute.KnockedBack&&corpseDistance>.4f,"Physical displacement: knock="+knockDistance+" corpse="+corpseDistance);
+   yield return new WaitForSeconds(2.7f);Require(g.Corpses.SimulatedCount==0&&g.Corpses.ActiveCount==2,"Corpse freeze budget");
+   brute.Retire();brute.Spawn(Floor(g.PlayerPosition+forward*3),g.config.enemySpeed,EnemyKind.Brute);brute.Agent.speed=0;wall=GameObject.CreatePrimitive(PrimitiveType.Cube);wall.layer=8;wall.transform.SetPositionAndRotation(g.PlayerPosition+forward*1.5f+Vector3.up,Quaternion.LookRotation(forward));wall.transform.localScale=new Vector3(3,3,.25f);yield return null;brute.TakeBlast(130,g.PlayerPosition);Require(brute.Health.CurrentHealth==390&&!brute.KnockedBack,"Blast damaged through cover");Destroy(wall);yield return null;
+   var point=brute.transform.position;wall=GameObject.CreatePrimitive(PrimitiveType.Cube);wall.layer=8;wall.transform.SetPositionAndRotation(point+forward*1.1f+Vector3.up,Quaternion.LookRotation(forward));wall.transform.localScale=new Vector3(3,3,.25f);brute.TakeBlast(1,point-forward);yield return new WaitForSeconds(.5f);Require(Vector3.Distance(point,brute.transform.position)<.6f&&brute.Agent.isOnNavMesh,"Knockback passed obstacle");Destroy(wall);brute.Retire();yield return null;
+   for(int i=0;i<10;i++){var z=g.Enemies[0];z.Spawn(Floor(center),0);Require(z.Kind==EnemyKind.Normal&&z.Health.MaximumHealth==130&&!z.KnockedBack,"Pooled variant reset");z.Health.Kill();Require(g.Corpses.ActiveCount<=8&&g.Corpses.SimulatedCount<=8,"Corpse pool exceeded cap");}
+   var corpseModels=g.Corpses.GetComponentsInChildren<CorpseVisual>();for(int a=0;a<corpseModels.Length;a++)for(int b=a+1;b<corpseModels.Length;b++)Require(Physics.GetIgnoreCollision(corpseModels[a].Colliders[0],corpseModels[b].Colliders[0]),"Reused corpses collide with one another");
+   yield return new WaitForSeconds(3.4f);Require(g.Corpses.ActiveCount==8&&g.Corpses.SimulatedCount==0,"Pool reuse/settle");yield return Photo("corpse-pool.png");Time.timeScale=4;yield return new WaitForSeconds(6);Time.timeScale=1;Require(g.Corpses.ActiveCount==0,"Corpse expiry");
+   Require(g.TryRoll(),"Death-during-roll fixture");hp.Kill();Require(g.Dead&&!g.Rolling&&!hp.DodgeInvulnerable&&!Physics.GetIgnoreLayerCollision(26,24),"Death retained dodge state");g.Restart();yield return null;yield return null;g=SurvivalGame.Instance;Require(g&&!g.Dead&&g.CanRoll&&g.Rolls==0&&g.Corpses.ActiveCount==0&&g.Ammo==100&&g.config.shotgunMagazineSize==60,"Restart retained presentation state");
+   File.WriteAllText(Path.Combine(output,"character-pass.json"),$"{{\"passed\":true,\"device\":\"{SystemInfo.deviceModel}\",\"graphics\":\"{SystemInfo.graphicsDeviceType}\",\"shotgunMagazine\":30,\"shotgunRoundsPerSecond\":3.2,\"dodgeButtonAndAnimation\":true,\"dodgeDistance\":{Num(rollDistance)},\"dodgeBlockedByWall\":true,\"dodgeBriefImmunityAndArmorProtection\":true,\"cooldownAndPause\":true,\"grenadeAimAndDeathGuards\":true,\"threeEnemyHealthSpeedAndVisualVariants\":true,\"actualGrenadeKillsTwoTypes\":true,\"bruteSurvivesAndKnocksBack\":true,\"knockDistance\":{Num(knockDistance)},\"corpsePhysicsDisplacement\":{Num(corpseDistance)},\"blastRespectsCover\":true,\"knockbackRespectsObstaclesAndNavMesh\":true,\"corpsePoolCap\":8,\"corpseFreezeExpiryReuse\":true,\"restartReset\":true}}");Debug.Log("CHARACTER_VALIDATION_PASS");Application.Quit(0);
+  }
+  static string Num(float n)=>n.ToString(System.Globalization.CultureInfo.InvariantCulture);
+ }
+}
